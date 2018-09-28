@@ -1,5 +1,5 @@
-Staging Datasore
-================
+Staging Datastore
+=================
 
 Specification of the staging datastore.
 
