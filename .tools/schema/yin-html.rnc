@@ -1,0 +1,75 @@
+# Program name: yin-html.rng
+# 
+# Copyright © 2013 by Ladislav Lhotka, CZ.NIC <lhotka@nic.cz>
+# 
+# RELAX NG schema for YIN with extensions for HTML markup.
+# 
+# NOTE:
+# 
+# This schema extends yin.rng by adding support for the following
+# non-standard YIN extension:
+# 
+# Arguments of 'contact', 'description', 'organization' and 'reference'
+# (wrapped in <text>) may contain the following HTML elements in the
+# "http://www.w3.org/1999/xhtml" namespace:
+# 
+# <html:p> - a paragraph of text
+# <html:ul> - unordered list
+# <html:ol> - ordered list
+# 
+# <html:p> elements may, apart from text, also contain empty
+# <html:br/> elements that cause an unconditional line break.
+# 
+# List elements must contain one or more <html:li> elements
+# representing list items with text and <html:br/> elements.
+# 
+# A <text> element may also have the xml:id attribute and contain the
+# XInclude element <xi:include>.
+# 
+# ==
+# 
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+namespace dc = "http://purl.org/dc/terms"
+namespace html = "http://www.w3.org/1999/xhtml"
+namespace ns1 = "urn:ietf:params:xml:ns:yang:yin:1"
+namespace xi = "http://www.w3.org/2001/XInclude"
+
+dc:title [ "RELAX NG Schema for YIN with HTML extensions" ]
+dc:creator [ "Ladislav Lhotka" ]
+dc:date [ "2013-11-04" ]
+dc:subject [ "YIN, XML syntax for YANG, HTML" ]
+dc:identifier [ "urn:ietf:params:xml:ns:yang:yin:1" ]
+dc:description [
+  "\x{a}" ~
+  "    RELAX NG schema defines grammar for data models expressed in YIN,\x{a}" ~
+  "    an XML syntax equivalent to YANG, with extensions that enable HTML\x{a}" ~
+  "    markup in text-like contents.\x{a}" ~
+  "  "
+]
+include "yin.rnc" inherit = ns1
+text-content |=
+  attribute xml:id { xsd:ID }?,
+  (element html:p { html-inline-content }
+   | element html:ul { html-list-content }
+   | element html:ol { html-list-content }
+   | element xi:include {
+       attribute href { xsd:anyURI },
+       attribute xpointer { text }?
+     })+
+html-inline-content =
+  # This may be extended in the future
+  mixed {
+    element html:br { empty }*
+  }
+html-list-content = element html:li { html-inline-content }+

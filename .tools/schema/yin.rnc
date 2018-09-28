@@ -1,0 +1,675 @@
+# Program name: yin.rng
+# 
+# Copyright © 2015 by Ladislav Lhotka, CZ.NIC <lhotka@nic.cz>
+# 
+# RELAX NG schema for YIN (see RFC 6020).
+# 
+# ==
+# 
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+namespace dc = "http://purl.org/dc/terms"
+default namespace ns1 = "urn:ietf:params:xml:ns:yang:yin:1"
+
+dc:title [ "RELAX NG Schema for YIN" ]
+dc:creator [ "Ladislav Lhotka" ]
+dc:date [ "2013-12-04" ]
+dc:subject [ "YIN, XML syntax for YANG" ]
+dc:identifier [ "urn:ietf:params:xml:ns:yang:yin:1" ]
+dc:description [
+  "RELAX NG schema defines grammar for data models\x{a}" ~
+  "  expressed in YIN, an XML syntax equivalent to YANG."
+]
+start = module-stmt | submodule-stmt
+module-stmt =
+  element module {
+    attribute name { identifier },
+    ((module-header-stmts,
+      linkage-stmts,
+      meta-stmts,
+      revision-stmts,
+      body-stmts)
+     & extensions)
+  }
+submodule-stmt =
+  element submodule {
+    attribute name { identifier },
+    ((submodule-header-stmts,
+      linkage-stmts,
+      meta-stmts,
+      revision-stmts,
+      body-stmts)
+     & extensions)
+  }
+module-header-stmts = yang-version-stmt? & namespace-stmt & prefix-stmt
+submodule-header-stmts = yang-version-stmt? & belongs-to-stmt
+meta-stmts = organization-stmt? & contact-stmt? & desc-ref
+linkage-stmts = (import-stmt | include-stmt)*
+revision-stmts = revision-stmt*
+body-stmts =
+  (extension-stmt
+   | feature-stmt
+   | identity-stmt
+   | typedef-stmt
+   | grouping-stmt
+   | data-def-stmt
+   | augment-stmt
+   | rpc-stmt
+   | notification-stmt
+   | deviation-stmt)*
+feature-stmt =
+  element feature {
+    attribute name { identifier },
+    (if-feature-stmts & status-desc-ref & extensions)
+  }
+if-feature-stmts =
+  element if-feature {
+    attribute name { xsd:string },
+    extensions
+  }*
+identity-stmt =
+  element identity {
+    attribute name { identifier },
+    (if-feature-stmts & base-stmt* & status-desc-ref & extensions)
+  }
+base-stmt =
+  element base {
+    attribute name { identifier-ref },
+    extensions
+  }
+data-def-stmt =
+  container-stmt
+  | leaf-stmt
+  | leaf-list-stmt
+  | list-stmt
+  | choice-stmt
+  | anydata-stmt
+  | anyxml-stmt
+  | uses-stmt
+yang-version-stmt =
+  element yang-version {
+    attribute value { "1" | "1.1" },
+    extensions
+  }
+import-stmt =
+  element import {
+    attribute module { identifier },
+    (prefix-stmt & revision-date-stmt? & desc-ref & extensions)
+  }
+include-stmt =
+  element include {
+    attribute module { identifier },
+    (revision-date-stmt? & desc-ref & extensions)
+  }
+namespace-stmt =
+  element namespace {
+    attribute uri { xsd:anyURI },
+    extensions
+  }
+prefix-stmt =
+  element prefix {
+    attribute value { identifier },
+    extensions
+  }
+revision-date-stmt =
+  element revision-date {
+    attribute date { xsd:date }
+  }
+belongs-to-stmt =
+  element belongs-to {
+    attribute module { identifier },
+    (prefix-stmt & extensions)
+  }
+organization-stmt = element organization { text-element & extensions }
+text-element = element text { text-content }
+text-content = text
+contact-stmt = element contact { text-element & extensions }
+description-stmt = element description { text-element & extensions }
+reference-stmt = element reference { text-element & extensions }
+units-stmt =
+  element units {
+    attribute name { xsd:string },
+    extensions
+  }
+revision-stmt =
+  element revision {
+    attribute date { xsd:date },
+    (desc-ref & extensions)
+  }
+extension-stmt =
+  element extension {
+    attribute name { identifier },
+    (argument-stmt? & status-desc-ref & extensions)
+  }
+argument-stmt =
+  element argument {
+    attribute name { identifier },
+    (yin-element-stmt? & extensions)
+  }
+yin-element-stmt =
+  element yin-element {
+    attribute value { xsd:boolean },
+    extensions
+  }
+typedef-stmt =
+  element typedef {
+    attribute name { identifier },
+    (type-stmt
+     & units-stmt?
+     & default-stmt?
+     & status-desc-ref
+     & extensions)
+  }
+type-stmt =
+  element type {
+    (decimal64-type
+     | integer-type
+     | string-type
+     | enumeration-type
+     | bits-type
+     | binary-type
+     | leafref-type
+     | identityref-type
+     | union-type
+     | instance-identifier-type
+     | (attribute name { identifier-ref },
+        (range-stmt
+         | (length-stmt & pattern-stmts)
+         | enum-stmt+
+         | bit-stmt+)))
+    & extensions
+  }
+decimal64-type =
+  attribute name { "decimal64" },
+  (fraction-digits-stmt & range-stmt)
+fraction-digits-stmt =
+  element fraction-digits {
+    attribute value {
+      xsd:unsignedByte { minInclusive = "1" maxInclusive = "18" }
+    },
+    extensions
+  }
+range-stmt =
+  element range {
+    attribute value { range-expr },
+    (error-message-stmt? & error-app-tag-stmt? & desc-ref & extensions)
+  }?
+integer-type =
+  attribute name {
+    "int8"
+    | "int16"
+    | "int32"
+    | "int64"
+    | "uint8"
+    | "uint16"
+    | "uint32"
+    | "uint64"
+  },
+  range-stmt
+string-type =
+  attribute name { "string" },
+  (length-stmt & pattern-stmts)
+length-stmt =
+  element length {
+    attribute value { length-expr },
+    (error-message-stmt? & error-app-tag-stmt? & desc-ref & extensions)
+  }?
+pattern-stmts =
+  element pattern {
+    attribute value { xsd:string },
+    (modifier-stmt?
+     & error-message-stmt?
+     & error-app-tag-stmt?
+     & desc-ref
+     & extensions)
+  }*
+modifier-stmt =
+  element modifier {
+    attribute value { modifier-arg },
+    extensions
+  }
+modifier-arg = "invert-match"
+default-stmt =
+  element default {
+    attribute value { xsd:string },
+    extensions
+  }
+enumeration-type =
+  attribute name { "enumeration" },
+  enum-stmt+
+enum-stmt =
+  element enum {
+    attribute name { text },
+    (if-feature-stmts & value-stmt? & status-desc-ref & extensions)
+  }
+bits-type =
+  attribute name { "bits" },
+  bit-stmt+
+bit-stmt =
+  element bit {
+    attribute name { identifier },
+    (if-feature-stmts & position-stmt? & status-desc-ref & extensions)
+  }
+position-stmt =
+  element position {
+    attribute value { xsd:nonNegativeInteger },
+    extensions
+  }
+binary-type =
+  attribute name { "binary" },
+  (length-stmt?)
+leafref-type =
+  attribute name { "leafref" },
+  (path-stmt & require-instance-stmt?)
+path-stmt =
+  element path {
+    attribute value { path-arg },
+    extensions
+  }
+identityref-type =
+  attribute name { "identityref" },
+  base-stmt+
+union-type =
+  attribute name { "union" },
+  type-stmt+
+instance-identifier-type =
+  attribute name { "instance-identifier" },
+  require-instance-stmt?
+require-instance-stmt =
+  element require-instance {
+    attribute value { xsd:boolean },
+    extensions
+  }
+status-stmt =
+  element status {
+    attribute value { status-arg },
+    extensions
+  }
+status-arg = "current" | "obsolete" | "deprecated"
+config-stmt =
+  element config {
+    attribute value { xsd:boolean },
+    extensions
+  }
+mandatory-stmt =
+  element mandatory {
+    attribute value { xsd:boolean },
+    extensions
+  }
+presence-stmt =
+  element presence {
+    attribute value { xsd:string },
+    extensions
+  }
+ordered-by-stmt =
+  element ordered-by {
+    attribute value { ordered-by-arg },
+    extensions
+  }
+ordered-by-arg = "user" | "system"
+must-stmt =
+  element must {
+    attribute condition { xsd:string },
+    (error-message-stmt? & error-app-tag-stmt? & desc-ref & extensions)
+  }
+error-message-stmt =
+  element error-message {
+    element value { text },
+    extensions
+  }
+error-app-tag-stmt =
+  element error-app-tag {
+    attribute value { xsd:string },
+    extensions
+  }
+min-elements-stmt =
+  element min-elements {
+    attribute value { xsd:nonNegativeInteger },
+    extensions
+  }
+max-elements-stmt =
+  element max-elements {
+    attribute value { "unbounded" | xsd:positiveInteger },
+    extensions
+  }
+value-stmt =
+  element value {
+    attribute value { xsd:integer },
+    extensions
+  }
+grouping-stmt =
+  element grouping {
+    attribute name { identifier },
+    (status-desc-ref
+     & (typedef-stmt
+        | grouping-stmt
+        | data-def-stmt
+        | action-stmt
+        | notification-stmt)*
+     & extensions)
+  }
+container-stmt =
+  element container {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & must-stmt*
+     & presence-stmt?
+     & config-stmt?
+     & status-desc-ref
+     & (typedef-stmt
+        | grouping-stmt
+        | data-def-stmt
+        | action-stmt
+        | notification-stmt)*
+     & extensions)
+  }
+leaf-stmt =
+  element leaf {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & type-stmt
+     & units-stmt?
+     & must-stmt*
+     & default-stmt?
+     & config-stmt?
+     & mandatory-stmt?
+     & status-desc-ref
+     & extensions)
+  }
+leaf-list-stmt =
+  element leaf-list {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & type-stmt
+     & units-stmt?
+     & must-stmt*
+     & default-stmt*
+     & config-stmt?
+     & min-elements-stmt?
+     & max-elements-stmt?
+     & ordered-by-stmt?
+     & status-desc-ref
+     & extensions)
+  }
+list-stmt =
+  element list {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & must-stmt*
+     & key-stmt?
+     & unique-stmt*
+     & config-stmt?
+     & min-elements-stmt?
+     & max-elements-stmt?
+     & ordered-by-stmt?
+     & status-desc-ref
+     & (typedef-stmt | grouping-stmt | action-stmt | notification-stmt)*
+     & data-def-stmt+
+     & extensions)
+  }
+key-stmt =
+  element key {
+    attribute value {
+      list { identifier+ }
+    },
+    extensions
+  }
+unique-stmt =
+  element unique {
+    attribute tag {
+      list { descendant-schema-nodeid+ }
+    },
+    extensions
+  }
+choice-stmt =
+  element choice {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & default-stmt?
+     & config-stmt?
+     & mandatory-stmt?
+     & status-desc-ref
+     & (short-case-stmt | case-stmt)*
+     & extensions)
+  }
+short-case-stmt =
+  container-stmt | leaf-stmt | leaf-list-stmt | list-stmt | anyxml-stmt
+case-stmt =
+  element case {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & status-desc-ref
+     & data-def-stmt*
+     & extensions)
+  }
+anydata-stmt =
+  element anydata {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & must-stmt*
+     & config-stmt?
+     & mandatory-stmt?
+     & status-desc-ref
+     & extensions)
+  }
+anyxml-stmt =
+  element anyxml {
+    attribute name { identifier },
+    (when-stmt?
+     & if-feature-stmts
+     & must-stmt*
+     & config-stmt?
+     & mandatory-stmt?
+     & status-desc-ref
+     & extensions)
+  }
+uses-stmt =
+  element uses {
+    attribute name { identifier-ref },
+    (when-stmt?
+     & if-feature-stmts
+     & status-desc-ref
+     & refine-stmt*
+     & uses-augment-stmt*
+     & extensions)
+  }
+refine-stmt =
+  element refine {
+    attribute target-node { descendant-schema-nodeid },
+    (if-feature-stmts
+     & (refine-container-stmts
+        | refine-leaf-stmts
+        | refine-leaf-list-stmts
+        | refine-list-stmts
+        | refine-choice-stmts
+        | refine-anyxml-stmts)
+     & desc-ref
+     & extensions)
+  }
+refine-container-stmts = must-stmt* & presence-stmt? & config-stmt?
+refine-leaf-stmts =
+  must-stmt* & default-stmt? & config-stmt? & mandatory-stmt?
+refine-leaf-list-stmts =
+  must-stmt*
+  & default-stmt*
+  & config-stmt?
+  & min-elements-stmt?
+  & max-elements-stmt?
+refine-list-stmts =
+  must-stmt* & config-stmt? & min-elements-stmt? & max-elements-stmt?
+refine-choice-stmts = default-stmt? & config-stmt? & mandatory-stmt?
+refine-anyxml-stmts = config-stmt? & mandatory-stmt?
+uses-augment-stmt =
+  element augment {
+    attribute target-node { descendant-schema-nodeid },
+    (when-stmt?
+     & if-feature-stmts
+     & status-desc-ref
+     & (data-def-stmt | case-stmt | action-stmt | notification-stmt)+
+     & extensions)
+  }
+augment-stmt =
+  element augment {
+    attribute target-node { absolute-schema-nodeid },
+    (when-stmt?
+     & if-feature-stmts
+     & status-desc-ref
+     & (data-def-stmt | case-stmt | action-stmt | notification-stmt)+
+     & extensions)
+  }
+when-stmt =
+  element when {
+    attribute condition { xsd:string },
+    desc-ref,
+    extensions
+  }
+rpc-stmt =
+  element rpc {
+    attribute name { identifier },
+    (if-feature-stmts
+     & status-desc-ref
+     & (typedef-stmt | grouping-stmt)*
+     & input-stmt?
+     & output-stmt?
+     & extensions)
+  }
+action-stmt =
+  element action {
+    attribute name { identifier },
+    (if-feature-stmts
+     & status-desc-ref
+     & (typedef-stmt | grouping-stmt)*
+     & input-stmt?
+     & output-stmt?
+     & extensions)
+  }
+input-stmt =
+  element input {
+    (must-stmt | typedef-stmt | grouping-stmt)*
+    & data-def-stmt+
+    & extensions
+  }
+output-stmt =
+  element output {
+    (must-stmt | typedef-stmt | grouping-stmt)*
+    & data-def-stmt+
+    & extensions
+  }
+notification-stmt =
+  element notification {
+    attribute name { identifier },
+    (if-feature-stmts
+     & status-desc-ref
+     & (must-stmt | typedef-stmt | grouping-stmt | data-def-stmt)*
+     & extensions)
+  }
+deviation-stmt =
+  element deviation {
+    attribute target-node { absolute-schema-nodeid },
+    (desc-ref
+     & (deviate-not-supported-stmt
+        | (deviate-add-stmt
+           | deviate-replace-stmt
+           | deviate-delete-stmt)+))
+  }
+deviate-not-supported-stmt =
+  element deviate {
+    attribute value { "not-supported" }
+  }
+deviate-add-stmt =
+  element deviate {
+    attribute value { "add" },
+    (units-stmt?
+     & must-stmt*
+     & unique-stmt*
+     & default-stmt?
+     & config-stmt?
+     & mandatory-stmt?
+     & min-elements-stmt?
+     & max-elements-stmt?)
+  }
+deviate-delete-stmt =
+  element deviate {
+    attribute value { "delete" },
+    (units-stmt? & must-stmt* & unique-stmt* & default-stmt?)
+  }
+deviate-replace-stmt =
+  element deviate {
+    attribute value { "replace" },
+    (type-stmt?
+     & units-stmt?
+     & default-stmt?
+     & config-stmt?
+     & mandatory-stmt?
+     & min-elements-stmt?
+     & max-elements-stmt?)
+  }
+extensions =
+  element * - ns1:* {
+    (attribute * { text }
+     | any-element)*
+  }*
+any-element =
+  element * {
+    mixed {
+      (attribute * { text }
+       | any-element)*
+    }
+  }
+# Common combinations of patterns
+desc-ref = description-stmt? & reference-stmt?
+status-desc-ref = status-stmt? & desc-ref
+# Regular expressions for lexical terms
+identifier =
+  xsd:NCName {
+    pattern = "[_A-Za-z][_\-A-Za-z0-9.]*"
+    pattern = "..?|[^xX].*|.[^mM].*|..[^lL].*"
+  }
+identifier-ref =
+  xsd:Name {
+    pattern = "([_A-Za-z][_\-A-Za-z0-9.]*:)?[_A-Za-z][_\-A-Za-z0-9.]*"
+    pattern =
+      "(..?|[^xX].*|.[^mM].*|..[^lL].*):(..?|[^xX].*|.[^mM].*|..[^lL].*)|[^:]{1,2}|[^xX][^:]*|.[^mM:][^:]*|.[^:][^lL:][^:]*"
+  }
+range-expr =
+  xsd:string {
+    pattern =
+      "\s*(-INF|INF|min|max|\-?(0|[1-9][0-9]*)(\.[0-9]+(E[\-+]?[0-9]+)?)?)(\s*\.\.\s*(-INF|INF|min|max|\-?(0|[1-9][0-9]*)(\.[0-9]+(E[\-+]?[0-9]+)?)?))?(\s*\|\s*(-INF|INF|min|max|\-?(0|[1-9][0-9]*)(\.[0-9]+(E[\-+]?[0-9]+)?)?)(\s*\.\.\s*(-INF|INF|min|max|\-?(0|[1-9][0-9]*)(\.[0-9]+(E[\-+]?[0-9]+)?)?))?)*\s*"
+  }
+length-expr =
+  xsd:string {
+    pattern =
+      "\s*(min|max|(0|[1-9][0-9]*))(\s*\.\.\s*(min|max|(0|[1-9][0-9]*)))?(\s*\|\s*(min|max|(0|[1-9][0-9]*))(\s*\.\.\s*(min|max|(0|[1-9][0-9]*)))?)*\s*"
+  }
+path-arg =
+  xsd:string {
+    pattern =
+      "((/([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*(\[\s*([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*=\s*current\s*\(\s*\)\s*/\s*(\.\.\s*/\s*)+(([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*/\s*)*([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*\])*)+)|((\.\./)+([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*((\[\s*([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*=\s*current\s*\(\s*\)\s*/\s*(\.\.\s*/\s*)+(([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*/\s*)*([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*\])*(/([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*(\[\s*([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*=\s*current\s*\(\s*\)\s*/\s*(\.\.\s*/\s*)+(([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*/\s*)*([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*\s*\])*)+)?)"
+  }
+absolute-schema-nodeid =
+  xsd:string {
+    pattern =
+      "(/([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*)+"
+  }
+descendant-schema-nodeid =
+  xsd:string {
+    pattern =
+      "([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*(/([_A-Za-z][._\-A-Za-z0-9]*:)?[_A-Za-z][._\-A-Za-z0-9]*)*"
+  }
