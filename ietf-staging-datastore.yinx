@@ -4,6 +4,7 @@
         xmlns:md="urn:ietf:params:xml:ns:yang:ietf-staging-datastore"
         xmlns:h="http://www.w3.org/1999/xhtml"
         xmlns:xi="http://www.w3.org/2001/XInclude">
+  <yang-version value="1.1"/>
   <namespace uri="urn:ietf:params:xml:ns:yang:ietf-staging-datastore"/>
   <prefix value="stds"/>
   <import module="ietf-datastores">
@@ -17,15 +18,15 @@
       <xi:include href=".tools/bplate/netmod-module.yinx"
                   xpointer="xpointer(id('contact')/*)"/>
       <h:p>
-        Editor:   Martin Bjorklund<h:br/>
+        Author:   Martin Bjorklund<h:br/>
                   &lt;mailto:mbj@tail-f.com&gt;
       </h:p>
       <h:p>
-        Editor:   Ladislav Lhotka<h:br/>
+        Author:   Ladislav Lhotka<h:br/>
                   &lt;mailto:lhotka@nic.cz&gt;
       </h:p>
       <h:p>
-        Editor:   Rob Wilton<h:br/>
+        Author:   Rob Wilton<h:br/>
                   &lt;mailto:rwilton@cisco.com&gt;
       </h:p>
     </text>
@@ -63,10 +64,10 @@
   <rpc name="commit">
     <description>
       <text>
-	<h:p>Atomically merge the contents of client's staging
-	datastore into the intended datastore.</h:p>
+	<h:p>Atomically merge the contents of the client's staging
+	configuration datastore into the running configuration datastore.</h:p>
 	<h:p>If a merge conflict occurs that cannot be automatically
-	resolved, the server SHALL send an error report with
+	resolved, the server SHALL return an error with
 	error-app-tag set to 'merge-conflict' and error-info
 	indicating the reason for the conflict.</h:p>
       </text>
@@ -75,8 +76,9 @@
 
   <rpc name="reset">
     <description>
-      <text>Reset the client's staging datastore so that its contents
-      is identical to the contents of the intended repository.</text>
+      <text>Reset the client's staging configuration datastore so that
+      its contents is identical to the contents of the running configuration
+      repository.</text>
     </description>
   </rpc>
 
