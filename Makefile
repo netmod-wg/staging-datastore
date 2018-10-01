@@ -1,13 +1,13 @@
-I_D = # Name of the Internet-Draft (without revision)
-REVNO = # I-D revision number
+I_D = draft-lhotka-netmod-staging-datastore
+REVNO = 00
 DATE ?= $(shell date +%F)
-MODULES =
+MODULES = ietf-staging-datastore
 SUBMODULES =
-FIGURES = model.tree
+FIGURES =
 EXAMPLE_BASE = example
 EXAMPLE_TYPE = get-reply
 baty = $(EXAMPLE_BASE)-$(EXAMPLE_TYPE)
-EXAMPLE_INST = $(baty).xml
+EXAMPLE_INST =
 PYANG_OPTS =
 
 # Paths for pyang
@@ -15,7 +15,7 @@ export PYANG_RNG_LIBDIR ?= /usr/share/yang/schema
 export PYANG_XSLT_DIR ?= /usr/share/yang/xslt
 export YANG_MODPATH ?= .:/usr/share/yang/modules/ietf:/usr/share/yang/modules/iana
 
-artworks = $(addsuffix .aw, $(yass) $(yams)) $(EXAMPLE_INST).aw \
+artworks = $(addsuffix .aw, $(yass) $(yams)) \
 	   $(addsuffix .aw, $(FIGURES))
 idrev = $(I_D)-$(REVNO)
 yams = $(addsuffix .yang, $(MODULES))
@@ -28,7 +28,7 @@ y2dopts = -t $(EXAMPLE_TYPE) -b $(EXAMPLE_BASE)
 
 .PHONY: all clean gittag rnc refs validate yang
 
-all: $(idrev).txt $(schemas) model.tree
+all: $(idrev).txt # $(schemas) model.tree
 
 refs: stdrefs.ent
 

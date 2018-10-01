@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module name="ietf-staging-datastore"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:md="urn:ietf:params:xml:ns:yang:ietf-staging-datastore"
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:xi="http://www.w3.org/2001/XInclude">
+  <namespace uri="urn:ietf:params:xml:ns:yang:ietf-staging-datastore"/>
+  <prefix value="stds"/>
+  <import module="ietf-datastores">
+    <prefix value="ds"/>
+  </import>
+  <organization>
+    <text>IETF Network Modeling (NETMOD) Working Group</text>
+  </organization>
+  <contact>
+    <text>
+      <xi:include href=".tools/bplate/netmod-module.yinx"
+                  xpointer="xpointer(id('contact')/*)"/>
+      <h:p>
+        Editor:   Martin Bjorklund<h:br/>
+                  &lt;mailto:mbj@tail-f.com&gt;
+      </h:p>
+      <h:p>
+        Editor:   Ladislav Lhotka<h:br/>
+                  &lt;mailto:lhotka@nic.cz&gt;
+      </h:p>
+      <h:p>
+        Editor:   Rob Wilton<h:br/>
+                  &lt;mailto:rwilton@cisco.com&gt;
+      </h:p>
+    </text>
+  </contact>
+  <description>
+    <text>
+      <h:p>This module defines an identity and operations to be used with the
+      staging datastore.</h:p>
+      <xi:include href=".tools/bplate/common-module.yinx"
+                  xpointer="xpointer(id('desc')/*)"/>
+    </text>
+  </description>
+  <revision date="2018-10-01">
+    <description>
+      <text>Initial revision.</text>
+    </description>
+    <reference>
+      <text>
+	RFC XXXX: The Staging Datastore
+      </text>
+    </reference>
+  </revision>
+
+  <!-- Identities -->
+
+  <identity name="staging">
+    <base name="ds:datastore"/>
+    <description>
+      <text>The staging datastore.</text>
+    </description>
+  </identity>
+
+  <!-- Operations -->
+  
+  <rpc name="commit">
+    <description>
+      <text>
+	<h:p>Atomically merge the contents of client's staging
+	datastore into the intended datastore.</h:p>
+	<h:p>If a merge conflict occurs that cannot be automatically
+	resolved, the server SHALL send an error report with
+	error-app-tag set to 'merge-conflict' and error-info
+	indicating the reason for the conflict.</h:p>
+      </text>
+    </description>
+  </rpc>
+
+  <rpc name="reset">
+    <description>
+      <text>Reset the client's staging datastore so that its contents
+      is identical to the contents of the intended repository.</text>
+    </description>
+  </rpc>
+
+</module>

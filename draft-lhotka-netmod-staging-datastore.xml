@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rfc SYSTEM ".tools/schema/rfc2629.dtd" [
+<!ENTITY % COMMON SYSTEM ".tools/bplate/common.ent">
+%COMMON;
+<!ENTITY % WG SYSTEM ".tools/bplate/ietf-wg.ent">
+%WG;
+<!ENTITY % stdrefs SYSTEM "stdrefs.ent">
+%stdrefs;
+<!ENTITY % figures SYSTEM "figures.ent">
+%figures;
+<!ENTITY % yang SYSTEM "yang.ent">
+%yang;
+<!ENTITY running '&lt;intended&gt;'>
+<!ENTITY candidate '&lt;candidate&gt;'>
+<!ENTITY intended '&lt;intended&gt;'>
+<!ENTITY operational '&lt;operational&gt;'>
+]>
+
+<?rfc strict="yes"?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+
+<rfc category="std">
+  <front>
+    <title abbrev="Staging Datastore">The Staging Datastore</title>
+    <author fullname="Martin Bjorklund" initials="M" surname="Bjorklund">
+      <organization>Tail-f Systems</organization>
+      <address>
+        <email>mbj@tail-f.com</email>
+      </address>
+    </author>
+    <author fullname="Ladislav Lhotka" initials="L" surname="Lhotka">
+      <organization>CZ.NIC</organization>
+      <address>
+        <email>lhotka@nic.cz</email>
+      </address>
+    </author>
+    <author fullname="Robert Wilton" initials="R" surname="Wilton">
+      <organization>Cisco Systems</organization>
+      <address>
+        <email>rwilton@cisco.com</email>
+      </address>
+    </author>
+    <date year="YYYY-MM-DD"/>
+    <area/>
+    &netmod-wg; 		<!--or another WG -->
+
+    <abstract>
+      <t>TBD</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="introduction" title="Introduction">
+      <t>TBD</t>
+    </section>
+
+    <section anchor="term-not" title="Terminology and Notation">
+      &kw-2119;
+    </section>
+
+    <section anchor="yang" title="YANG Module">
+
+      &ed-hint-rfcno-rev;
+
+      <figure>
+	&ietf-staging-datastore.yang;
+      </figure>
+
+    </section>
+
+    <section anchor="iana" title="IANA Considerations">
+
+      &ed-hint-rfcno;
+
+      <section anchor="iana-uri" title="URI Registrations">
+
+	<t>This document registers a URI in the "IETF XML Registry"
+	<xref target="RFC3688"/>. The following registration has been
+	made:</t>
+        <figure>
+          <artwork>
+   URI: urn:ietf:params:xml:ns:yang:ietf-staging-datastore
+   Registrant Contact: The IESG.
+   XML: N/A, the requested URI is an XML namespace.
+          </artwork>
+        </figure>
+
+      </section>
+
+      <section anchor="iana-yang" title="YANG Module Registrations">
+
+        <t>This document registers a YANG module in the "YANG Module
+        Names" registry <xref target="RFC6020"/>. The following
+        registration has been made:</t>
+        <figure>
+          <artwork>
+   name:      ietf-staging-datastore
+   namespace: urn:ietf:params:xml:ns:yang:ietf-staging-datastore
+   prefix:    stds
+   reference: RFC XXXX
+          </artwork>
+        </figure>
+      </section>
+
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>TBD</t>
+
+    </section>
+
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      &RFC2119;
+      &RFC3688;
+      &RFC6020;
+      <!-- Generate other references by "make refs",
+	   and add entity references here. -->
+    </references>
+
+  </back>
+</rfc>
