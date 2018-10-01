@@ -77,7 +77,7 @@
 
       &ed-hint-rfcno;
 
-      <section anchor="iana-uri">
+      <section anchor="iana-uri" title="URI Registrations">
 
 	<t>This document registers a URI in the "IETF XML Registry"
 	<xref target="RFC3688"/>. The following registration has been
