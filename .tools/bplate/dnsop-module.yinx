@@ -16,18 +16,6 @@ be included in other YANG modules via XInclude.
 	WG Web:   &lt;https://tools.ietf.org/wg/dnsop/&gt;<h:br/>
 	WG List:  &lt;mailto:dnsop@ietf.org&gt;
       </h:p>
-      <h:p>
-	WG Chair: Benno Overeinder<h:br/>
-	          &lt;mailto:benno@NLnetLabs.nl&gt;
-      </h:p>
-      <h:p>
-	WG Chair: Suzanne Woolf<h:br/>
-	          &lt;mailto:suzworldwide@gmail.com&gt;
-      </h:p>
-      <h:p>
-	WG Chair: Tim Wicinski<h:br/>
-	          &lt;mailto:tjw.ietf@gmail.com&gt;
-      </h:p>
     </text>
   </contact>
 </module>

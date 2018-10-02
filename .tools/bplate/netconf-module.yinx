@@ -16,14 +16,6 @@ be included in other YANG modules via XInclude.
 	WG Web:   &lt;https://tools.ietf.org/wg/netconf/&gt;<h:br/>
 	WG List:  &lt;mailto:netconf@ietf.org&gt;
       </h:p>
-      <h:p>
-	WG Chair: Kent Watsen<h:br/>
-	          &lt;mailto:kwatsen@juniper.net&gt;
-      </h:p>
-      <h:p>
-	WG Chair: Mahesh Jethanandani<h:br/>
-	          &lt;mailto:mjethanandani@gmail.com&gt;
-      </h:p>
     </text>
   </contact>
 </module>
