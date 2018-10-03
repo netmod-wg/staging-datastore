@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
 <locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <documentElement localName="rfc" uri=".tools/schema/rfc7991.rnc"/>
   <uri pattern="*.yinx" uri=".tools/schema/yin-html.rnc"/>
 </locatingRules>
