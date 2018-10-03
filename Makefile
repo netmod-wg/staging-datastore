@@ -39,7 +39,7 @@ $(idrev).xml: $(I_D).xml $(artworks) figures.ent yang.ent
 	  xmllint --noent -o $@ -
 
 $(idrev).txt: $(idrev).xml
-	@xml2rfc --dtd=.tools/schema/rfc2629.dtd $<
+	@xml2rfc --text --v3 --no-dtd $<
 
 hello.xml: $(yass) $(yams) hello-external.ent
 	@echo '<hello xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">' > $@
