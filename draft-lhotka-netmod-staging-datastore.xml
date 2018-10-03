@@ -10,6 +10,7 @@
 %figures;
 <!ENTITY % yang SYSTEM "yang.ent">
 %yang;
+<!ENTITY staging '&lt;staging&gt;'>
 <!ENTITY running '&lt;intended&gt;'>
 <!ENTITY candidate '&lt;candidate&gt;'>
 <!ENTITY intended '&lt;intended&gt;'>
@@ -56,11 +57,41 @@
 
   <middle>
     <section anchor="introduction" title="Introduction">
-      <t>TBD</t>
+      <t>This document utilizes the extensibility of the Network
+      Management Datastore Architecture (NMDA) <xref
+      target="RFC8342"/> and defines a new configuration datastore
+      named "staging".</t>
     </section>
 
     <section anchor="term-not" title="Terminology and Notation">
       &kw-2119;
+    </section>
+
+    <section anchor="def-staging"
+	     title="Definition of the &quot;staging&quot; Datastore">
+      <t>Following the guidelines of <eref
+      target="https://tools.ietf.org/html/rfc8342#appendix-A">Appendix&#xa0;A</eref>
+      in <xref target="RFC8342"/>, <xref target="tab.staging-prop"/>
+      summarizes the properties of the "staging" datastore.</t>
+
+      <texttable anchor="tab.staging-prop"
+		 title="Properties of the &quot;staging&quot; Datastore">
+	<ttcol>Property</ttcol>
+	<ttcol>Value</ttcol>
+	<c>Name</c>
+	<c>staging</c>
+	<c>YANG modules</c>
+	<c>all</c>
+	<c>YANG nodes</c>
+	<c>all "config true" data nodes</c>
+	<c>How applied</c>
+	<c>upon successful completion of the "stds:commit" operation,
+	changes are propagated to &running;</c>
+	<c>Protocols</c>
+	<c>NETCONF, RESTCONF</c>
+	<c>Defining YANG module</c>
+	<c>ietf-staging-datastore</c>
+      </texttable> 
     </section>
 
     <section anchor="yang" title="YANG Module">
@@ -121,8 +152,7 @@
       &RFC2119;
       &RFC3688;
       &RFC6020;
-      <!-- Generate other references by "make refs",
-	   and add entity references here. -->
+      &RFC8342;
     </references>
 
   </back>
