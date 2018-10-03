@@ -10,9 +10,8 @@
   <import module="ietf-datastores">
     <prefix value="ds"/>
   </import>
-  <organization>
-    <text>IETF Network Modeling (NETMOD) Working Group</text>
-  </organization>
+  <xi:include href=".tools/bplate/netmod-module.yinx"
+              xpointer="xpointer(id('org'))"/>
   <contact>
     <text>
       <xi:include href=".tools/bplate/netmod-module.yinx"
