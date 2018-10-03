@@ -5,7 +5,6 @@ yang.ent
 hello.xml
 model.tree
 *.rn[gc]
-!yin*.rn[gc]
 *.sch
 *.dsrl
 *.yang
