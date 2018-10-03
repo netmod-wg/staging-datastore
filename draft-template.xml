@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE rfc SYSTEM ".tools/schema/rfc2629.dtd" [
+<!DOCTYPE rfc [
 <!ENTITY % COMMON SYSTEM ".tools/bplate/common.ent">
 %COMMON;
 <!ENTITY % WG SYSTEM ".tools/bplate/ietf-wg.ent">
