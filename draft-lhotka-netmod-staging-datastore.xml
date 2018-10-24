@@ -110,9 +110,7 @@
 
       &ed-hint-rfcno-rev;
 
-      <figure>
-	&ietf-staging-datastore.yang;
-      </figure>
+      &ietf-staging-datastore.yang;
 
     </section>
 
