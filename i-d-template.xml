@@ -64,9 +64,7 @@
 
       <!-- YANG modules are included this way:
 
-      <figure>
-	&ietf-foo.yang;
-      </figure>
+      &ietf-foo.yang;
 
       The <CODE BEGIN/END> delimiters are also added automatically.
       -->
