@@ -82,9 +82,9 @@ endif
 	@xsltproc --xinclude $(xsldir)/canonicalize.xsl $< | \
 	  xsltproc --output $@ $(xslpars) $(xsldir)/yin2yang.xsl -
 
-ietf-%.yang.sc: ietf-%.yang
+%.yang.sc: %.yang
 	@pyang $(PYANG_OPTS) --ietf $<
-	@echo '<sourcecode name="'ietf-$*@$(DATE)'.yang">' > $@
+	@echo '<sourcecode name="'$*@$(DATE)'.yang">' > $@
 	@echo '<![CDATA[' >> $@
 	@echo >> $@
 	@cat $< >> $@
